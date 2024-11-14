@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Elm + localStorage</title>
+  <script type="text/javascript" src="main.js"></script>
+  <style>
+    .time_input_component {
+      width: 40px;
+      margin: 0px 2px;
+    }
+    .time_input_container {
+      margin: 3;
+    }
+
+    .player_log_item {
+      color:darkgreen;
+    }
+
+    .controller_log_item {
+      color:black;
+    }
+
+    .split_container {
+    }
+
+    .split_player_item {
+      margin-left: 50vw;
+      color:darkgreen;
+    }
+
+    .split_controller_item {
+      margin-right: 50vw;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="myapp"></div>
+</body>
+
+<script type="text/javascript">
+    
+var app = Elm.View.CondensedView.init({
+	node: document.getElementById('myapp'),
+	flags: 1  
+});
+
+</script>
+
+</html>
