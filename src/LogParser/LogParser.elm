@@ -1,6 +1,7 @@
 module LogParser.LogParser exposing (..)
 import Parser exposing (..)
 import Model.LogModel as LM
+import Model.TimeStampModel as TM
 import LogParser.Timestamp exposing (androidTimeStampParser)
 import LogParser.ParserUtil exposing (receiveUntil)
 import LogParser.Timestamp exposing (iosTimeStampParser)
@@ -59,4 +60,4 @@ parsePlayerRawFile : String -> String -> List LM.LogData
 parsePlayerRawFile plyaerName content  = 
     let logList =  String.split "\n" content 
         parsedLogs = List.map (parseOneLineLog plyaerName) logList 
-    in  List.sortWith (\a b -> LM.compareTimeStamp a.timeStamp b.timeStamp) (List.filterMap identity parsedLogs)
+    in  List.sortWith (\a b -> TM.compareTimeStamp a.timeStamp b.timeStamp) (List.filterMap identity parsedLogs)

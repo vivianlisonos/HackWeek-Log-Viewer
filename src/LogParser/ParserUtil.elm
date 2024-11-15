@@ -1,6 +1,7 @@
 module LogParser.ParserUtil exposing (..)
 import Parser exposing (..)
 
+
 receiveRest: Parser String 
 receiveRest = 
     getChompedString <| 
@@ -30,4 +31,12 @@ getStringInBracket = wrappedArround "[" "]"
 getStringInParenthesis = wrappedArround "[" "]"
 getStringInCurly = wrappedArround "{" "}"
 getStringInArrow  = wrappedArround "<" ">"
-trimStartnAndEnd = String.dropLeft 1 >> (String.dropRight 1)
+
+--- helper function for smaller parser 
+
+flexibleInt = succeed identity |. chompWhile (\x -> x == '0') |= (oneOf [int, succeed 0])
+slash = symbol "/"
+colon = symbol ":"
+hyphen = symbol "-"
+period = symbol "."
+comma = symbol ","

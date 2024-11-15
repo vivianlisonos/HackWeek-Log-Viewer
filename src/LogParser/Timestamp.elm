@@ -1,7 +1,7 @@
-module LogParser.Timestamp exposing (androidTimeStampParser, iosTimeStampParser, playerTimeStampParser, unparseTimeStamp, flexibleInt)
+module LogParser.Timestamp exposing (androidTimeStampParser, iosTimeStampParser, playerTimeStampParser, unparseTimeStamp)
 
 import Parser exposing(..)
-import Model.LogModel exposing (TimeStamp)
+import Model.TimeStampModel exposing (TimeStamp)
 import LogParser.ParserUtil exposing(..)
 
 -- TimeStamp Parser for android timestamp 
@@ -41,7 +41,11 @@ iosTimeStampParser =
         |= micro
 
 playerTimeStampBuilder : Int -> Int -> Int -> Int -> Int -> Float -> TimeStamp
-playerTimeStampBuilder y mo d h mi se = receiveFloat (TimeStamp y mo d h mi) se 
+playerTimeStampBuilder y mo d h mi se = 
+    let receiveFloat f total = let  secPart = floor total 
+                                    microPart = ceiling ((total - (toFloat secPart)) * 1000)
+                                in f secPart microPart
+    in receiveFloat (TimeStamp y mo d h mi) se 
 
 -- TimeStamp Parser for player timestamp 
 playerTimeStampParser: Parser TimeStamp 
@@ -61,11 +65,6 @@ playerTimeStampParser =
         |= float 
         |.chompUntilAndDrop "]"
 
-receiveFloat : (Int -> Int -> TimeStamp) -> Float -> TimeStamp 
-receiveFloat f total = 
-    let secPart = floor total 
-        microPart = ceiling ((total - (toFloat secPart)) * 1000)
-    in f secPart microPart
 
         
 -- Stringfy function 
@@ -74,16 +73,8 @@ unparseTimeStamp { year, month, day, hour, minute, second, miliSecond} =
     String.join "/" (List.map String.fromInt  [year, month, day, hour, minute, second, miliSecond])
 
 
-
 -- Helper function for smaller parser 
 -- parser for separator 
-flexibleInt = succeed identity |. chompWhile (\x -> x == '0') |= (oneOf [int, succeed 0])
-slash = symbol "/"
-colon = symbol ":"
-hyphen = symbol "-"
-period = symbol "."
-comma = symbol ","
-
 -- parser for time symbol 
 yy= int 
 mon = flexibleInt
