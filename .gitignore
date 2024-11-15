@@ -7,3 +7,4 @@ repl-temp-*
 *.log 
 *.txt
 *.xml
+main.js
