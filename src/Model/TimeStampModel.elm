@@ -21,7 +21,7 @@ isInrange : TimeStamp -> TimeStamp -> TimeStamp -> Bool
 isInrange earlyLimit lateLimit time= 
     (aEarliearThanB earlyLimit time ||  sametime earlyLimit time) && ( sametime lateLimit time || aEarliearThanB time lateLimit)
 
--- TODO: this is super ugly. clean this up !!!!!!!1
+-- TODO: replace this if a standard timestamp library support better time comparision function 
 aEarliearThanB : TimeStamp -> TimeStamp -> Bool 
 aEarliearThanB timeA timeB = 
     timeA.year < timeB.year || 

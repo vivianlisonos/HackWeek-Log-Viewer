@@ -16,7 +16,7 @@ import Html
 import Html.Styled exposing (..)
 import Html.Styled.Attributes exposing (..)
 import Html.Styled.Events exposing (..)
-import Html.Styled.Lazy exposing (lazy)
+import Html.Styled.Lazy exposing (..)
 import LogParser.LogParser exposing (parseControllerFile, parsePlayerRawFile)
 import Model.LogModel exposing (..)
 import Model.TimeStampModel exposing (..)
@@ -28,7 +28,6 @@ import Utils exposing (..)
 import View.FileControl exposing (..)
 import View.FilterControl exposing (..)
 import View.LogItem exposing (..)
-import Html.Styled.Lazy exposing (..)
 
 
 main : Program Int Model Msg
@@ -43,6 +42,8 @@ subscriptions _ =
 
 
 ------------------ MODEL SECTION ------------------------
+
+
 init : Int -> ( Model, Cmd Msg )
 init _ =
     ( defaultView, Cmd.none )
@@ -81,8 +82,6 @@ defaultView =
 
 ------------------------ ACTION SECTION -------------------------
 ---------------- MAIN UPDATE FUNCTION ---------------------
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -256,7 +255,6 @@ update msg model =
                 fileName =
                     File.name file
 
-                -- TODO: check how to confirm this is displayed
                 playerName =
                     getOpt fileName <| List.head <| String.split "." fileName
             in
@@ -335,18 +333,8 @@ view model =
 mainCard : Model -> Html Msg
 mainCard model =
     let
-        { displayedControllerLogs, 
-          playerLogRepo, 
-          selectedPlayers, 
-          relevantPlayerLogs, 
-          logViewMode, 
-          playerSearchInput, 
-          searchPlayerKeys, 
-          searchPlayerMode, 
-          controllerSearchInput, 
-          searchControllerKeys, 
-          searchControllerMode, 
-          searchTimeStampRange } = model
+        { displayedControllerLogs, playerLogRepo, selectedPlayers, relevantPlayerLogs, logViewMode, playerSearchInput, searchPlayerKeys, searchPlayerMode, controllerSearchInput, searchControllerKeys, searchControllerMode, searchTimeStampRange } =
+            model
     in
     div []
         [ div [ class "filter_control" ]
@@ -356,13 +344,14 @@ mainCard model =
                 , lazy5 playerFilterSection searchPlayerKeys playerSearchInput searchPlayerMode (Dict.keys playerLogRepo) selectedPlayers
                 ]
             ]
-        , -- log view
-          case logViewMode of
+
+        -- , -- log view
+        , case logViewMode of
             JoinView ->
-                 comobineLogArea ( displayedControllerLogs, relevantPlayerLogs )
+                lazy2 comobineLogArea displayedControllerLogs relevantPlayerLogs
 
             SplitView ->
-                lazy splitLogArea ( displayedControllerLogs, relevantPlayerLogs )
+                lazy2 splitLogArea displayedControllerLogs relevantPlayerLogs
 
             ControllerOnly ->
                 lazy controllerLogArea displayedControllerLogs

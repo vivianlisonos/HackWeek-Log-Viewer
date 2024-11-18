@@ -20,20 +20,17 @@ iosParser terminal =
     |= iosTimeStampParser 
     |= receiveUntil terminal 
 
----- TODO: player parser will need to be improved to cover differen types of log 
 playerParser : String -> Parser LM.LogData
 playerParser playerName  = 
     succeed (LM.makePlayerLog playerName)
     |= playerTimeStampParser
     |= receiveRest 
 
-
 logFileParser logparser revLogs =  
     oneOf [
         succeed (\log -> Loop (log :: revLogs)) |= logparser,
         succeed () |> map (\_ -> Done (List.reverse revLogs))
     ]
-
 
 parseFile itemParser fileContent = 
     let fileParser = loop []  (logFileParser itemParser) in 
@@ -55,9 +52,6 @@ parseControllerFile content =
                  res -> res 
     in result 
 
-
-
--- TODO: fix this to not using "\n"
 parseOneLineLog playerName log = 
     case run (playerParser playerName) <| log ++ "\n" of 
     Result.Ok res -> Just res

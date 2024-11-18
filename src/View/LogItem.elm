@@ -120,7 +120,7 @@ playerLogArea logs =
 ------------------- log view for mix ------------------------
 
 
-comobineLogArea (controllerLogs, playerLogs) =
+comobineLogArea controllerLogs playerLogs =
     let
         totalLog =
             List.sortWith (\a b -> compareTimeStamp a.timeStamp b.timeStamp) (List.append controllerLogs playerLogs)
@@ -128,7 +128,7 @@ comobineLogArea (controllerLogs, playerLogs) =
      div [] <| List.map defaultLogItem totalLog 
 
 
-splitLogArea (controllerLogs, playerLogs) =
+splitLogArea controllerLogs playerLogs =
     let
         totalLog =
             List.sortWith (\a b -> compareTimeStamp a.timeStamp b.timeStamp) (List.append controllerLogs playerLogs)

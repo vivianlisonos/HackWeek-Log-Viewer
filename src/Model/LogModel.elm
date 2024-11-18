@@ -2,7 +2,6 @@ module Model.LogModel exposing(..)
 import Model.TimeStampModel exposing (..)
 import EverySet exposing (..)
 
------- Time data type 
 
 --------- Log data type 
 type LogSource = Player String | Controller
