@@ -28,25 +28,34 @@ playerParser playerName  =
     |= receiveRest 
 
 
-logFileParser logparser terminal revLogs =  
+logFileParser logparser revLogs =  
     oneOf [
-        succeed (\log -> Loop (log :: revLogs)) |= (logparser terminal),
+        succeed (\log -> Loop (log :: revLogs)) |= logparser,
         succeed () |> map (\_ -> Done (List.reverse revLogs))
     ]
 
 
-parseFile itemParser  terminal  fileContent = 
-    let fileParser = loop []  (logFileParser itemParser terminal) in 
+parseFile itemParser fileContent = 
+    let fileParser = loop []  (logFileParser itemParser) in 
     case run fileParser fileContent of 
     Result.Ok res -> res 
     Result.Err _ -> []
 
+-- parse ios or android file 
+parseIOSFile terminal = parseFile <| iosParser terminal
 
-parseIOSFile : String -> String -> List LM.LogData
-parseIOSFile = parseFile iosParser
+parseAndroidFile terminal = parseFile <| androidParser terminal
 
-parseAndroidFile : String -> String -> List LM.LogData 
-parseAndroidFile = parseFile androidParser
+parseControllerFile content =
+    let terminal = String.slice 0 5 content 
+        iosResult  = parseFile (iosParser terminal) content 
+
+        result = case iosResult of 
+                 [] -> parseFile (androidParser terminal) content
+                 res -> res 
+    in result 
+
+
 
 -- TODO: fix this to not using "\n"
 parseOneLineLog playerName log = 

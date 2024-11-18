@@ -3,36 +3,327 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Elm + localStorage</title>
+  <title>No Magic, But Logs</title>
   <script type="text/javascript" src="main.js"></script>
   <style>
+    :root {
+      --player-log-color:rgb(183,207,247); 
+      --controller-log-color: rgb(173, 207, 156);;
+      --background-color: rgb(24,24,24);
+      --header-text-color: rgb(192 192 192);
+      --selected-color:rgb(96, 98, 108);
+      --secondary-text: rgb(96, 98, 108);
+      --header-button-color: rgb(10,10,10);
+    }
+
+
+    .h6 {
+      padding: 0;
+      margin: 0 0;
+      margin-bottom: 2px;
+      font-size: 16px;
+    }
+
+    * , pre {
+      background-color: var(--background-color);
+      font-weight: 500;
+      scrollbar-color: var(--secondary-text) var(--background-color);
+  
+    }
+
+    .filter_control * {
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: 550;
+    }
+
+    .filter_control {
+      border-bottom: 1px var(--secondary-text) 1px;
+      position: sticky;
+      top: 0;
+      border-bottom: solid 1px var(--secondary-text);
+    }
+
+    input {
+      color: var(--header-text-color)
+    }
+
+    .player_list_item {
+      color: var(--header-text-color)
+    }
+
+    button {
+      border-radius: 10px;
+      padding: 5px 10px;
+      background-color: white;
+      color: var(--header-button-color);
+    }
+
     .time_input_component {
       width: 40px;
       margin: 0px 2px;
     }
+
+    p,
+    h5,
+    strong {
+      color:var(--header-text-color);
+    }
+
+    .time_filter_container {
+      margin: 0.5vh 1.5vw;
+      margin-bottom: 1vh;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+      gap: 0.2vw;
+    }
+
     .time_input_container {
-      margin: 3;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      gap: 0.2vw
+    }
+
+    .time_input_body {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      column-gap: 0.2vw;
+    }
+
+    .time_filter_button_container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.2vw;
+    }
+
+    .start_end_time_filter {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+
+    input {
+      border-radius: 5px;
+      border: var(--secondary-text) 1px solid;
+      padding: 2px 5px;
+    }
+
+    .search_key_item_container {
+      height: 200px;
+    }
+
+    .player_controller_search {
+      width: 96vw;
+      display: flex;
+      justify-content: space-between;
+      margin: 1.5vh 1.5vw;
+    }
+
+    .filter_keys_container {
+      width: 48vw;
+
+    }
+
+    .search_keywordItem_container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    h4 {
+      padding: 0;
+      margin: 2px;
+      color: var(--secondary-text);
+      font-size: 13px;
     }
 
     .player_log_item {
-      color:darkgreen;
+      color:var(--player-log-color);
     }
 
     .controller_log_item {
-      color:black;
-    }
-
-    .split_container {
+      color: black;
     }
 
     .split_player_item {
       margin-left: 50vw;
-      color:darkgreen;
+      color: var(--player-log-color);
     }
 
     .split_controller_item {
       margin-right: 50vw;
+      color: var(--controller-log-color)
     }
+
+    .player_log_item {
+      color: var(--player-log-color)
+    }
+
+    .controller_log_item {
+      color: var(--controller-log-color)
+    }
+
+    .deletable_button_container {
+      border-radius: 5px;
+      padding: 2px 6px;
+      background-color: white;
+      color: var(--header-button-color);
+      margin: 5px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+    }
+
+    .deletable_button {
+      border: none;
+      padding: 0;
+      margin-left: 6px;
+    }
+
+    .action_control_container {
+      position: sticky;
+      top: 0px;
+      display: grid;
+    }
+
+
+    .file_upload_control_container {
+      display: flex;
+      justify-content: flex-start;
+      gap: 4vw;
+    }
+
+    .case_control_button {
+      border: none;
+      background-color: none;
+    }
+
+    .search_key_item_input {
+      padding: 10px;
+      width: 300px;
+    }
+
+    .default_flex {
+      display: flex;
+      justify-content: flex-start;
+      justify-content: flex-start;
+      gap: 5vw;
+    }
+
+    .filter_keys_body {
+      display: flex;
+      align-items: center;
+      width: 48vw;
+      gap: 0.3vw;
+    }
+
+    /* control view mode */
+    .file_control_container {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 1.5vw;
+    }
+
+    .control_view_mode_subtitle {
+      font-size: 18px;
+    }
+
+    .view_mode_control {
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      gap: 0.5vw
+    }
+    .view_mode_control button {
+      margin: 0 3px;
+    }
+    .log_item_container {
+      border: rgb(20, 20, 20) solid 0.5px;
+    }
+
+    .log_item_container {
+      font-weight: 800;
+      border: rgb(20, 20, 20) solid 1px;
+    }
+
+    .uploaded_player_container {
+      padding: 2px 3px;
+      display: flex;
+      gap: 3px;
+      border: solid 0.4px var(--secondary-text);
+      color: black;
+      align-items: center;
+      border-radius: 5px;
+      background-color: white;
+      color: var(--header-button-color);
+      font-size: 12px;
+    }
+
+    .player_file_list {
+      display: flex;
+      gap: 1vw;
+      justify-content: flex-start;
+      margin-top: 0.5vh;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .uploaded_player_button {
+      padding: 0;
+      margin: 0;
+      background-color: white;
+      border: none;
+      font-size: 14px;
+    }
+
+    .time_picker_button {
+      font-size: 10px;
+      padding: 0px;
+      background-color: var(--background-color);
+      border: none;
+      color: var(--secondary-text);
+    }
+
+    .pick_time :hover {
+      text-decoration: underline;
+      color: var(--selected-color);
+      transition: color 0.2s ease;
+    }
+
+
+    .log_item_label {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pick_time_container {
+      display: flex;
+      justify-content: flex-end;
+      gap: 3px;
+    }
+
+    .selected_view_mode {
+      color: white;
+      background-color: var(--selected-color);
+    }
+
+    .case_sensitive {
+      color: white;
+      background-color: var(--selected-color);
+    }
+
+    h3 {
+      padding: 0px;
+      margin: 0px;
+      color: var(--header-text-color);
+      font-size: 16px;
+    }
+
+
   </style>
 </head>
 
@@ -41,11 +332,11 @@
 </body>
 
 <script type="text/javascript">
-    
-var app = Elm.View.CondensedView.init({
-	node: document.getElementById('myapp'),
-	flags: 1  
-});
+
+  var app = Elm.View.CondensedView.init({
+    node: document.getElementById('myapp'),
+    flags: 1
+  });
 
 </script>
 

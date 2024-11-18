@@ -19,9 +19,7 @@ isInRangedBySec range time =
 
 isInrange : TimeStamp -> TimeStamp -> TimeStamp -> Bool 
 isInrange earlyLimit lateLimit time= 
-    sametime earlyLimit time || 
-    sametime lateLimit time || 
-    (aEarliearThanB earlyLimit time && aEarliearThanB time lateLimit)
+    (aEarliearThanB earlyLimit time ||  sametime earlyLimit time) && ( sametime lateLimit time || aEarliearThanB time lateLimit)
 
 -- TODO: this is super ugly. clean this up !!!!!!!1
 aEarliearThanB : TimeStamp -> TimeStamp -> Bool 

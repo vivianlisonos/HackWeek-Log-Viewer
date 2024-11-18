@@ -1,4 +1,4 @@
-module LogParser.Timestamp exposing (androidTimeStampParser, iosTimeStampParser, playerTimeStampParser, unparseTimeStamp)
+module LogParser.Timestamp exposing (androidTimeStampParser, iosTimeStampParser, playerTimeStampParser, unparseTimeStamp, parseHtmlDate, unparseHtmlDate)
 
 import Parser exposing(..)
 import Model.TimeStampModel exposing (TimeStamp)
@@ -70,7 +70,7 @@ playerTimeStampParser =
 -- Stringfy function 
 unparseTimeStamp : TimeStamp -> String
 unparseTimeStamp { year, month, day, hour, minute, second, miliSecond} = 
-    String.join "/" (List.map String.fromInt  [year, month, day, hour, minute, second, miliSecond])
+    String.join "/" (List.map timeComponentString  [year, month, day, hour, minute, second, miliSecond])
 
 
 -- Helper function for smaller parser 
@@ -83,3 +83,25 @@ hh = flexibleInt
 min = flexibleInt
 sec  = flexibleInt
 micro= flexibleInt 
+
+
+--
+type alias Date = { year: Int, month: Int, day: Int }
+htmlInputDateParser =   
+    succeed Date 
+    |= yy 
+    |. symbol "-"
+    |= mon 
+    |. symbol "-"
+    |= dd 
+
+parseHtmlDate: String -> Date 
+parseHtmlDate input = 
+    case run htmlInputDateParser input of
+        Result.Ok res -> res 
+        Result.Err _ -> Date 0 0 0 
+unparseHtmlDate year month day = 
+    timeComponentString year ++ "-" ++ timeComponentString month ++ "-" ++ timeComponentString day
+
+timeComponentString time = 
+    if time < 10 then "0" ++  (String.fromInt time) else String.fromInt time 

@@ -13,10 +13,7 @@ makePlayerLog playerID time content =
     in LogData time simplified <| Player playerID
 makeControllerLog time content =  LogData time content Controller
 
-
----- TODO: this probably could be moded to main 
-
 type CaseConfig = CaseSensitive | CaseInsensitive 
 type MatchConfig = MatchWord | ContainsWord 
-type alias SearchConfig = { caseConfig: CaseConfig,  matchConfig: MatchConfig }
+type alias SearchConfig = (CaseConfig, MatchConfig)
 
